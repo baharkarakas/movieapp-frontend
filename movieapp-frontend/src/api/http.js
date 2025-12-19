@@ -8,7 +8,7 @@ export async function apiFetch(path, options = {}) {
   const token = getToken();
 
   const headers = {
-    "Accept": "application/json",
+    Accept: "application/json",
     ...(options.headers || {}),
   };
 
@@ -19,18 +19,26 @@ export async function apiFetch(path, options = {}) {
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
-console.log("REQ", path, headers);
 
-  const res = await fetch(`${BASE_URL}${path}`, {
-    ...options,
-    headers,
-  });
+  console.log("REQ", path, headers);
 
+  const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
+
+  const contentType = res.headers.get("content-type") || "";
   const text = await res.text();
-  const data = text ? JSON.parse(text) : null;
+
+  let data = null;
+  if (text) {
+    if (contentType.includes("application/json")) {
+      try { data = JSON.parse(text); } catch { data = text; }
+    } else {
+      data = text;
+    }
+  }
 
   if (!res.ok) {
-    throw new Error(data || `HTTP ${res.status}`);
+    throw new Error(typeof data === "string" ? data : JSON.stringify(data));
   }
+
   return data;
 }
