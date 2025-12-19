@@ -16,7 +16,9 @@ export async function apiFetch(path, options = {}) {
     headers["Content-Type"] = "application/json";
   }
 
-  if (token) {
+  // ✅ Only attach token for NON-auth endpoints
+  const isAuthEndpoint = path.startsWith("/api/auth/");
+  if (token && !isAuthEndpoint) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
