@@ -24,7 +24,7 @@ function Navbar({ authed, onLogout }) {
             <h1 style={styles.logo}>MOVIE<span style={{ color: '#e50914' }}>DIARY</span></h1>
           </NavLink>
           <a
-            href="http://localhost:8080/how-to-use"
+            href="https://movieapp-backend-bhwe.onrender.com/how-to-use"
             target="_blank"
             rel="noreferrer"
             style={styles.externalLink}
